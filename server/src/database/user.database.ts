@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 import User from "./structures/user.schema";
 import {Model} from "mongoose";
 import {UserDTO} from "../dto/user.dto";
-import {hashString} from "../Util/Util";
+import OptionsDTO from "../dto/options.dto";
 
 export default class UserDatabase {
     private userSchema: Model<any>;
@@ -14,9 +14,41 @@ export default class UserDatabase {
     }
 
     async createUser(user: UserDTO){
-        const hashedPassword: String = await hashString(user.password)
-        user = {...user, password: hashedPassword}
-        await this.userSchema.create(user)
-        return user
+        try{
+            await this.userSchema.create(user)
+            return user
+        }
+        catch (e) {
+            console.error(e)
+        }
+    }
+
+    async getUser(user: UserDTO){
+        try{
+            return this.userSchema.findOne({login: user.login})
+        }
+        catch (e) {
+            console.error(e)
+        }
+    }
+
+    async updateUser(user: UserDTO, options:OptionsDTO){
+        try{
+            await this.userSchema.updateOne({login: user.login}, {...options})
+            return true
+        }
+        catch (e) {
+            console.error(e)
+        }
+    }
+
+    async deleteUser(user: UserDTO){
+        try{
+            await this.userSchema.deleteOne({login: user.login})
+            return true
+        }
+        catch (e) {
+            console.error(e)
+        }
     }
 }
