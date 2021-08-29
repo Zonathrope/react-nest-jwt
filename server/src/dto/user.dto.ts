@@ -1,4 +1,4 @@
 export class UserDTO{
-    login: String
-    password: String
+    login: string
+    password: string
 }
