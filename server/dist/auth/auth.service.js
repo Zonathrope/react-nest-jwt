@@ -8,44 +8,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
-const mongoose_1 = require("@nestjs/mongoose");
 const common_1 = require("@nestjs/common");
-const mongoose_2 = require("mongoose");
+const users_service_1 = require("../users/users.service");
 const Util_1 = require("../Util/Util");
-const user_schema_1 = require("../database/structures/user.schema");
 let AuthService = class AuthService {
-    constructor(model) {
-        this.model = model;
+    constructor(userService) {
+        this.userService = userService;
     }
-    async findAll() {
-        return await this.model.find().exec();
-    }
-    async findOne(login) {
-        return await this.model.findById(login).exec();
-    }
-    async create(user) {
-        return await new this.model(Object.assign(Object.assign({}, user), { password: await Util_1.hashString(user.password) })).save();
-    }
-    async edit(login, options) {
-        return await this.model.updateOne({ login }, Object.assign({}, options)).exec();
-    }
-    async delete(login) {
-        return await this.model.findByIdAndDelete(login).exec();
-    }
-    async checkPassword(user) {
-        const { password } = await this.model.findOne({ login: user.login });
-        return !!(await Util_1.checkHashedString(user.password, password));
+    async validateUser(login, password) {
+        const user = await this.userService.findOne(login);
+        if (user && await Util_1.checkHashedString(password, user.password)) {
+            const { password } = user, rest = __rest(user, ["password"]);
+            return rest;
+        }
+        return null;
     }
 };
 AuthService = __decorate([
     common_1.Injectable(),
-    __param(0, mongoose_1.InjectModel(user_schema_1.User.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __metadata("design:paramtypes", [users_service_1.UsersService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

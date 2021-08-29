@@ -12,11 +12,12 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const auth_module_1 = require("./auth/auth.module");
 const mongoose_1 = require("@nestjs/mongoose");
+const users_module_1 = require("./users/users.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     common_1.Module({
-        imports: [auth_module_1.AuthModule, mongoose_1.MongooseModule.forRoot('mongodb+srv://qwerty:12345@maincluster.sg7ka.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')],
+        imports: [auth_module_1.AuthModule, mongoose_1.MongooseModule.forRoot('mongodb+srv://qwerty:12345@maincluster.sg7ka.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'), users_module_1.UsersModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

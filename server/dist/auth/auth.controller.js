@@ -20,9 +20,6 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async index() {
-        return await this.authService.findAll();
-    }
     createUser(body) {
         console.log(body);
         return this.authService.create(body);
@@ -31,12 +28,6 @@ let AuthController = class AuthController {
         return this.authService.checkPassword(body);
     }
 };
-__decorate([
-    common_1.Get(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "index", null);
 __decorate([
     common_1.Post('/registration'),
     __param(0, common_1.Body()),
