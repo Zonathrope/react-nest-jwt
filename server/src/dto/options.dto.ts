@@ -1,4 +1,4 @@
 export default class OptionsDTO{
-    login?: String
-    password?: String
+    login?: string
+    password?: string
 }

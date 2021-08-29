@@ -1,29 +1,41 @@
+import {InjectModel} from "@nestjs/mongoose";
 import {Injectable} from '@nestjs/common';
-import UserDatabase from "../database/user.database";
+import {Model} from "mongoose";
+import {UpdateResult} from "mongodb";
 import {UserDTO} from "../dto/user.dto";
 import OptionsDTO from "../dto/options.dto";
 import {checkHashedString, hashString} from "../Util/Util";
+import {User, UserDocument} from "../database/structures/user.schema";
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userDatabase: UserDatabase) {}
+    constructor(@InjectModel(User.name) private readonly model: Model<UserDocument>) {}
 
-    async addUser(user: UserDTO): Promise<UserDTO>{
-        const hashedUser = { ...user, password: await hashString(user.password)}
-        await this.userDatabase.createUser({...hashedUser})
-        return hashedUser
+    async findAll(): Promise<Array<User>>{
+        return await this.model.find().exec()
+    }
+
+    async findOne(login: string): Promise<User>{
+        return await this.model.findById(login).exec()
+    }
+
+    async create(user: UserDTO): Promise<UserDTO>{
+        return await new this.model({
+            ...user,
+            password: await hashString(user.password)
+        }).save()
+    }
+
+    async edit(login: string, options: OptionsDTO): Promise<UpdateResult>{
+        return await this.model.updateOne({login},{...options}).exec()
+    }
+
+    async delete(login: string): Promise<User> {
+        return await this.model.findByIdAndDelete(login).exec();
     }
 
     async checkPassword(user: UserDTO): Promise<Boolean>{
-        const {password} = await this.userDatabase.getUser(user)
+        const {password} = await this.model.findOne({login: user.login})
         return !!(await checkHashedString(user.password, password));
-    }
-
-    async editUser(user: UserDTO, options: OptionsDTO): Promise<void>{
-        await this.userDatabase.updateUser(user, options)
-    }
-
-    async removeUser(user: UserDTO):Promise<void>{
-        await this.userDatabase.deleteUser(user)
     }
 }

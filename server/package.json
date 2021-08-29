@@ -22,14 +22,17 @@
   "dependencies": {
     "@nestjs/common": "^8.0.6",
     "@nestjs/core": "^8.0.6",
+    "@nestjs/mongoose": "^8.0.1",
     "@nestjs/platform-express": "^8.0.6",
+    "@nestjs/swagger": "^5.0.9",
     "dotenv": "^10.0.0",
     "mongodb": "^4.1.1",
-    "mongoose": "^6.0.1",
+    "mongoose": "^6.0.2",
     "password-hash": "^1.2.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.3.0"
+    "rxjs": "^7.3.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.1.1",
