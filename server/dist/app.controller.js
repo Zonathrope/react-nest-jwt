@@ -23,12 +23,15 @@ let AppController = class AppController {
         this.appService = appService;
         this.usersService = usersService;
     }
-    login(req) {
-        return req.user;
+    async login(req) {
+        return await req.user;
     }
     async registration(body) {
         await this.usersService.create(body);
         return this.usersService.findOne(body.login);
+    }
+    async getUser(login) {
+        return await this.usersService.findOne(login);
     }
 };
 __decorate([
@@ -37,7 +40,7 @@ __decorate([
     __param(0, common_1.Request()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Object)
+    __metadata("design:returntype", Promise)
 ], AppController.prototype, "login", null);
 __decorate([
     common_1.Post('/registration'),
@@ -46,6 +49,13 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.UserDto]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "registration", null);
+__decorate([
+    common_1.Get('/user/:login'),
+    __param(0, common_1.Param('login')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AppController.prototype, "getUser", null);
 AppController = __decorate([
     common_1.Controller(),
     __metadata("design:paramtypes", [app_service_1.AppService,

@@ -1,18 +1,19 @@
 import {Injectable} from '@nestjs/common';
 import {UsersService} from "../users/users.service";
 import {checkHashedString} from "../Util/Util";
+import {User} from "../database/structures/user.schema";
 
 @Injectable()
 export class AuthService {
-    constructor(private userService:UsersService) {}
+    constructor(private usersService: UsersService) {}
 
     async validateUser(login: string, password: string): Promise<any>{
-        const user = await this.userService.findOne(login)
+        const user: User = await this.usersService.findOne(login)
 
         if(user && await checkHashedString(password, user.password)){
-            const {password, ...rest} = user
-            return rest
+            return user
         }
+
         return null
     }
 }

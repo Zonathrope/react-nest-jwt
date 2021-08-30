@@ -1,6 +1,6 @@
 import { UsersService } from "../users/users.service";
 export declare class AuthService {
-    private userService;
-    constructor(userService: UsersService);
+    private usersService;
+    constructor(usersService: UsersService);
     validateUser(login: string, password: string): Promise<any>;
 }

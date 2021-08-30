@@ -16,7 +16,7 @@ export class UsersService {
     }
 
     async findOne(login: string): Promise<User | undefined>{
-        return await this.model.findOne({login: login}).exec()
+        return await this.model.findOne({login}).exec()
     }
 
     async create(user: UserDto): Promise<UserDto>{
