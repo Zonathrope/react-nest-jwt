@@ -18,13 +18,19 @@ const app_service_1 = require("./app.service");
 const local_auth_guard_1 = require("./auth/local-auth.guard");
 const user_dto_1 = require("./dto/user.dto");
 const users_service_1 = require("./users/users.service");
+const auth_service_1 = require("./auth/auth.service");
+const jwt_auth_guard_1 = require("./auth/jwt-auth.guard");
 let AppController = class AppController {
-    constructor(appService, usersService) {
+    constructor(appService, usersService, authService) {
         this.appService = appService;
         this.usersService = usersService;
+        this.authService = authService;
     }
     async login(req) {
-        return await req.user;
+        return await this.authService.login(req.user);
+    }
+    getHello(req) {
+        return req.user;
     }
     async registration(body) {
         await this.usersService.create(body);
@@ -43,6 +49,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "login", null);
 __decorate([
+    common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
+    common_1.Get('protected'),
+    __param(0, common_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", String)
+], AppController.prototype, "getHello", null);
+__decorate([
     common_1.Post('/registration'),
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
@@ -59,7 +73,8 @@ __decorate([
 AppController = __decorate([
     common_1.Controller(),
     __metadata("design:paramtypes", [app_service_1.AppService,
-        users_service_1.UsersService])
+        users_service_1.UsersService,
+        auth_service_1.AuthService])
 ], AppController);
 exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map
