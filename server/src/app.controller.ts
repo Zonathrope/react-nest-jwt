@@ -3,17 +3,25 @@ import {AppService} from './app.service';
 import {LocalAuthGuard} from "./auth/local-auth.guard";
 import {UserDto} from "./dto/user.dto";
 import {UsersService} from "./users/users.service";
+import {AuthenticatedGuard} from "./auth/authenticated.guard";
 
 @Controller()
 export class AppController {
     constructor(private readonly appService: AppService,
-                private readonly usersService: UsersService) {}
+                private readonly usersService: UsersService) {
+    }
 
 
     @UseGuards(LocalAuthGuard)
     @Post('/login')
     async login(@Request() req): Promise<any> {
-        return await req.user;
+        return {msg: "Logged in!"};
+    }
+
+    @UseGuards(AuthenticatedGuard)
+    @Get('protected')
+    getHello(@Request() req): string {
+        return req.user
     }
 
     @Post('/registration')
@@ -23,7 +31,7 @@ export class AppController {
     }
 
     @Get('/user/:login')
-    async getUser(@Param('login') login: string){
+    async getUser(@Param('login') login: string) {
         return await this.usersService.findOne(login)
     }
 }

@@ -6,6 +6,7 @@ export declare class AppController {
     private readonly usersService;
     constructor(appService: AppService, usersService: UsersService);
     login(req: any): Promise<any>;
+    getHello(req: any): string;
     registration(body: UserDto): Promise<any>;
     getUser(login: string): Promise<import("./database/structures/user.schema").User>;
 }

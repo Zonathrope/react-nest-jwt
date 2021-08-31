@@ -19,7 +19,8 @@ let AuthService = class AuthService {
     }
     async validateUser(login, password) {
         const user = await this.usersService.findOne(login);
-        if (user && await Util_1.checkHashedString(password, user.password)) {
+        const isValidPassport = await Util_1.checkHashedString(password, user.password);
+        if (user && isValidPassport) {
             return user;
         }
         return null;

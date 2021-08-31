@@ -12,12 +12,13 @@ const auth_service_1 = require("./auth.service");
 const users_module_1 = require("../users/users.module");
 const passport_1 = require("@nestjs/passport");
 const local_strategy_1 = require("./local.strategy");
+const session_serializer_1 = require("./session.serializer");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
     common_1.Module({
-        imports: [users_module_1.UsersModule, passport_1.PassportModule],
-        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy],
+        imports: [users_module_1.UsersModule, passport_1.PassportModule.register({ session: true })],
+        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, session_serializer_1.SessionSerializer],
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;

@@ -18,13 +18,17 @@ const app_service_1 = require("./app.service");
 const local_auth_guard_1 = require("./auth/local-auth.guard");
 const user_dto_1 = require("./dto/user.dto");
 const users_service_1 = require("./users/users.service");
+const authenticated_guard_1 = require("./auth/authenticated.guard");
 let AppController = class AppController {
     constructor(appService, usersService) {
         this.appService = appService;
         this.usersService = usersService;
     }
     async login(req) {
-        return await req.user;
+        return { msg: "Logged in!" };
+    }
+    getHello(req) {
+        return req.user;
     }
     async registration(body) {
         await this.usersService.create(body);
@@ -42,6 +46,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "login", null);
+__decorate([
+    common_1.UseGuards(authenticated_guard_1.AuthenticatedGuard),
+    common_1.Get('protected'),
+    __param(0, common_1.Request()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", String)
+], AppController.prototype, "getHello", null);
 __decorate([
     common_1.Post('/registration'),
     __param(0, common_1.Body()),

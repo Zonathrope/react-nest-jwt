@@ -9,8 +9,9 @@ export class AuthService {
 
     async validateUser(login: string, password: string): Promise<any>{
         const user: User = await this.usersService.findOne(login)
+        const isValidPassport = await checkHashedString(password, user.password)
 
-        if(user && await checkHashedString(password, user.password)){
+        if(user && isValidPassport){
             return user
         }
 
